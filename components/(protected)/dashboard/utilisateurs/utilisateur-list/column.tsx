@@ -19,7 +19,7 @@ export const columns: ColumnDef<IUtilisateur>[] = [
     cell: ({ row }) => {
       const user = row.original;
       return (
-        <User name={`${user.firstName} ${user.lastName}`}>{user.email}</User>
+        <User name={`${user.fullname}`}>{user.email}</User>
       );
     },
   },
