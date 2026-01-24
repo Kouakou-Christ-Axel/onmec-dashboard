@@ -27,7 +27,7 @@ export const documentsListQueryOption = (
     },
     placeholderData: (previousData: any) => previousData,
     staleTime: 30 * 1000, //30 secondes
-    refetchOnWindowFocus: false, //Ne pas refetch lors du focus de la fenetre
+    refetchOnWindowFocus: false, //Ne pas refetch lors du focus de la fenêtre
     refetchOnMount: true, //Refetch lors du mount
   };
 };

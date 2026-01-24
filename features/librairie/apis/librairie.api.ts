@@ -1,11 +1,8 @@
 import {api} from "@/lib/api";
 import {PaginatedResponse} from "@/types/api.type";
 import {SearchParams} from "ak-api-http";
-import {
-	IDocument,
-	IDocumentSearchParams
-} from "../types/document.types";
-import {DocumentCreateDTO, DocumentUpdateDTO} from "../schema/document.schema";
+import {IDocument, IDocumentSearchParams} from "../types/document.types";
+import {DocumentUpdateDTO} from "../schema/document.schema";
 
 export interface IDocumentAPI {
 	obtenirTousLesDocuments(params: IDocumentSearchParams): Promise<PaginatedResponse<IDocument>>;
@@ -40,6 +37,11 @@ export const librairieApi: IDocumentAPI = {
 			endpoint: `/librairie`,
 			method: "POST",
 			data,
+			config: {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				}
+			}
 		});
 	},
 

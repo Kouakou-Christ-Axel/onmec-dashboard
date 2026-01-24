@@ -1,7 +1,6 @@
 "use client";
 import Content from "@/components/primitives/Content";
 import React from 'react';
-import ActualitesFiltersBar from "@/components/(protected)/dashboard/actualites/actualites-filters-bar";
 import DocumentsListSection from "@/components/(protected)/dashboard/librairie/documents-list-section";
 import Title from "@/components/primitives/Title";
 import Subtitle from "@/components/primitives/Subtitle";
@@ -24,7 +23,7 @@ function LibrairiePage() {
 					startContent={<Plus className="w-4 h-4"/>}
 					className="mt-4 sm:mt-0"
 					as={Link}
-					href="/dashboard/actualites/ajouter"
+					href="/dashboard/librairie/ajouter"
 				>
 					Ajouter un document
 				</Button>

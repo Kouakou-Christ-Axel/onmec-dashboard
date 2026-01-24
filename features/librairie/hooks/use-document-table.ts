@@ -1,18 +1,18 @@
 import useDocumentsFilters from "@/features/librairie/hooks/use-documents-filters";
 import {useDocumentsListQuery} from "@/features/librairie/queries/document-list.query";
-import {getCoreRowModel, RowModel, useReactTable} from "@tanstack/react-table";
+import {getCoreRowModel, useReactTable} from "@tanstack/react-table";
 import {librairieTableColumns} from "@/components/(protected)/dashboard/librairie/librairie-table-columns";
-import {Table} from "@heroui/react";
 
 export function useDocumentTable() {
 	const {
 		filters,
 		setFilters,
 		handlePageChange,
-		currentSearchParams
+		currentSearchParams,
+		handleTitleChange,
 	} = useDocumentsFilters();
 
-	const {data, isLoading, isError} = useDocumentsListQuery(currentSearchParams);
+	const {data, isLoading, isError, error, isFetching} = useDocumentsListQuery(currentSearchParams);
 	const documents = data?.data || []
 	const meta = data?.meta;
 
@@ -43,8 +43,11 @@ export function useDocumentTable() {
 		meta,
 		isLoading,
 		isError,
+		isFetching,
+		error,
 		filters,
 		setFilters,
 		handlePageChange,
+		handleTitleChange
 	};
 }

@@ -19,6 +19,10 @@ export function useDocumentsFilters() {
     };
   }, [filters]);
 
+  const handleTitleChange = (title: string) => {
+    setFilters({ title, page: 1 });
+  }
+
   const handleClearAllFilters = () => {
     setFilters({
       title: '',
@@ -37,6 +41,7 @@ export function useDocumentsFilters() {
     currentSearchParams,
     handleClearAllFilters,
     handlePageChange,
+    handleTitleChange,
   };
 }
 
