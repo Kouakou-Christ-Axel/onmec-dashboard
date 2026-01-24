@@ -11,8 +11,13 @@ const nextConfig = {
 				port: "8081",
 			},
 			{
+				protocol: 'https',
+				hostname: 'admin.mec-ci.org',
+				pathname: '/uploads/**',
+			},
+			{
 				protocol: "https",
-				hostname: new URL("https://admin.mec-ci.org/").hostname,
+				hostname: new URL("https://images.unsplash.com").hostname,
 			}
 		],
 	},
