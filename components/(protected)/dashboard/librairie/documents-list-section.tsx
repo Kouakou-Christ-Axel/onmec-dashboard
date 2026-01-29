@@ -27,7 +27,7 @@ function DocumentsListSection() {
 					base: "w-full sm:max-w-[44%]",
 					inputWrapper: "border-1",
 				}}
-				placeholder="Search by name..."
+				placeholder="Rechercher par titre..."
 				size="sm"
 				startContent={<SearchIcon className="text-default-300"/>}
 				value={filters.title}
