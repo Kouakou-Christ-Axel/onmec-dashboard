@@ -6,35 +6,35 @@ import {
 } from '@tanstack/react-query';
 import { CheckCircle2, X } from "lucide-react";
 import {
-    supprimerDocumentAction
-} from '../actions/librairie.actions';
-import { useInvalidateDocumentQuery } from './index.query';
+    supprimerCategorieAction
+} from '@/features/signalements';
+import { useInvalidateCategorieQuery } from '../index.query';
 
-export const useSupprimerDocumentMutation = () => {
-    const invalidateDocumentQuery = useInvalidateDocumentQuery()
+export const useSupprimerCategorieMutation = () => {
+    const invalidateCategorieQuery = useInvalidateCategorieQuery()
     return useMutation({
         mutationFn: async ({ id }: { id: string }) => {
             if (!id) {
-                throw new Error("L'identifiant du document est requis.");
+                throw new Error("L'identifiant de la catégorie est requis.");
             }
-            const result = await supprimerDocumentAction(id)
+            const result = await supprimerCategorieAction(id)
             if (!result.success) {
-                throw new Error(result.error || "Erreur lors de la suppression du document");
+                throw new Error(result.message || "Erreur lors de la suppression de la catégorie");
             }
             return result.data!;
         },
         onSuccess: async () => {
             addToast({
-                title: "Document supprimé avec succès",
-                description: "Document supprimé avec succès",
-                promise: invalidateDocumentQuery(),
+                title: "Catégorie supprimée avec succès",
+                description: "La catégorie a été supprimée",
+                promise: invalidateCategorieQuery(),
                 icon: <CheckCircle2 />,
                 color: "success",
             });
         },
         onError: async (error) => {
             addToast({
-                title: "Erreur suppression document:",
+                title: "Erreur suppression catégorie:",
                 description: error.message,
                 promise: Promise.reject(error),
                 icon: <X />,

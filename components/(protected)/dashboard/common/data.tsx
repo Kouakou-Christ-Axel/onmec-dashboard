@@ -14,6 +14,7 @@ import {
 	IconBooks,
 	IconUsers,
 	IconUsersGroup,
+	IconAlarmAverage,
 } from "@tabler/icons-react";
 
 export const data = {
@@ -27,6 +28,11 @@ export const data = {
 			title: "Dashboard",
 			url: "/dashboard",
 			icon: IconDashboard,
+		},
+		{
+			title: "Signalements",
+			url: "/dashboard/signalements",
+			icon: IconAlarmAverage,
 		},
 		// {
 		//   title: "Users",
