@@ -1,22 +1,11 @@
 "use client";
 
 import Content from "@/components/primitives/Content";
-import { useUtilisateurListTable } from "@/features/utilisateur/hooks/useUtilisateurListTable";
-import {
-  Pagination,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@heroui/react";
-import { flexRender } from "@tanstack/react-table";
-import { UtilisateurAddModal } from "../utilisateur-modal/utilisateur-add-modal";
-import { UtilisateurDeleteModal } from "../utilisateur-modal/utilisateur-delete-modal";
-import { UtilisateurUpdateModal } from "../utilisateur-modal/utilisateur-update-modal";
-import { columns } from "./column";
-import { HeaderFilter } from "./header-filter";
+import {useUtilisateurListTable} from "@/features/utilisateur/hooks/useUtilisateurListTable";
+import {Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow,} from "@heroui/react";
+import {flexRender} from "@tanstack/react-table";
+import {columns} from "./column";
+import {HeaderFilter} from "./header-filter";
 
 export function UtilisateurList() {
   const {
@@ -26,9 +15,7 @@ export function UtilisateurList() {
     isFetching,
     handleTextFilterChange,
     handleEnumFilterChange,
-    modalStates,
     modalHandlers,
-    currentUser,
     filters,
   } = useUtilisateurListTable({ columns });
 
@@ -97,27 +84,6 @@ export function UtilisateurList() {
           </TableBody>
         </Table>
       </div>
-
-      {/* Modales - décommentez quand prêtes */}
-      <UtilisateurAddModal
-        isOpen={modalStates.addOpen}
-        setIsOpen={modalHandlers.setAddOpen}
-      />
-
-      {currentUser && (
-        <>
-          <UtilisateurUpdateModal
-            isOpen={modalStates.editOpen}
-            setIsOpen={modalHandlers.setEditOpen}
-            utilisateur={currentUser}
-          />
-          <UtilisateurDeleteModal
-            isOpen={modalStates.deleteOpen}
-            setIsOpen={modalHandlers.setDeleteOpen}
-            utilisateur={currentUser}
-          />
-        </>
-      )}
     </Content>
   );
 }

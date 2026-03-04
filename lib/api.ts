@@ -7,9 +7,6 @@ import { User } from "next-auth";
 export const api = new Api({
   baseUrl: baseURL, // Base URL de l'API
   timeout: 10000, // Timeout de la requête
-  headers: {
-    "Content-Type": "application/json", // En-têtes par défaut
-  },
   maxRetries: 3, // Nombre de tentatives de re tentative
   retryDelay: 1000, // Delais entre les tentatives
   enableAuth: true, // Authentification activée

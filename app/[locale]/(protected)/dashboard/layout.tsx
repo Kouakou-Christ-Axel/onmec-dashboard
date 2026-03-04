@@ -1,8 +1,6 @@
-import { AppSidebar } from "@/components/(protected)/dashboard/common/app-sidebar";
-import { SiteHeader } from "@/components/(protected)/dashboard/site-header";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-
-import Main from "@/components/primitives/Main";
+import {AppSidebar} from "@/components/(protected)/dashboard/common/app-sidebar";
+import {SiteHeader} from "@/components/(protected)/dashboard/site-header";
+import {SidebarInset, SidebarProvider} from "@/components/ui/sidebar";
 
 export default function DashboardLayout({
   children,
@@ -21,7 +19,7 @@ export default function DashboardLayout({
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
-        <Main>{children}</Main>
+        <div className="overflow-x-auto">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );
