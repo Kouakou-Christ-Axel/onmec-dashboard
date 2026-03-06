@@ -14,7 +14,7 @@ export const useAjouterQuizzMutation = () => {
             // Validation des données
             const validation = processAndValidateFormData(QuizzSchema, data,
                 {
-                    outputFormat: "formData",
+                    outputFormat: "object",
                 })
 
             if (!validation.success) {
