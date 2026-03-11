@@ -1,8 +1,8 @@
-import {ColumnDef} from "@tanstack/react-table";
-import {ICategorieSignalement} from "@/features/signalements";
+import { ColumnDef } from "@tanstack/react-table";
+import { ICategorieSignalement } from "@/features/signalements";
 import Link from "next/link";
-import {Loader2, MoreHorizontal, CheckCircle2, XCircle} from "lucide-react";
-import {formatDateTime} from "@/utils/date.utils";
+import { Loader2, MoreHorizontal, CheckCircle2, XCircle } from "lucide-react";
+import { formatDateTime } from "@/utils/date.utils";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -10,16 +10,16 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import {Button} from "@/components/ui/button";
-import {Badge} from "@/components/ui/badge";
-import {supprimerCategorieAction} from "@/features/signalements";
-import {useState} from "react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { supprimerCategorieAction } from "@/features/signalements";
+import { useState } from "react";
 
 export const categorieSignalementTableColumns: ColumnDef<ICategorieSignalement>[] = [
 	{
 		accessorKey: 'nom',
 		header: 'Nom',
-		cell: ({row}) => (
+		cell: ({ row }) => (
 			<span className="text-sm font-medium">
 				{row.original.nom}
 			</span>
@@ -28,7 +28,7 @@ export const categorieSignalementTableColumns: ColumnDef<ICategorieSignalement>[
 	{
 		accessorKey: 'description',
 		header: 'Description',
-		cell: ({row}) => (
+		cell: ({ row }) => (
 			<p className="text-sm text-gray-600 line-clamp-2 max-w-xs">
 				{row.original.description || 'Aucune description'}
 			</p>
@@ -37,7 +37,7 @@ export const categorieSignalementTableColumns: ColumnDef<ICategorieSignalement>[
 	{
 		accessorKey: 'validationObligatoire',
 		header: 'Validation requise',
-		cell: ({row}) => (
+		cell: ({ row }) => (
 			<div className="flex items-center gap-2">
 				{row.original.validationObligatoire ? (
 					<>
@@ -56,16 +56,17 @@ export const categorieSignalementTableColumns: ColumnDef<ICategorieSignalement>[
 	{
 		accessorKey: 'createdAt',
 		header: 'Date de création',
-		cell: ({row}) => (
+		cell: ({ row }) => (
 			<time className="text-sm">
-				{formatDateTime(row.original.createdAt)}
+				{row.original.createdAt ? formatDateTime(row.original.createdAt) : "N/A"}
 			</time>
 		)
 	},
 	{
+		
 		id: 'actions',
 		header: 'Actions',
-		cell: ({row}) => {
+		cell: ({ row }) => {
 			const [isPending, setIsPending] = useState(false);
 
 			const handleSupprimer = async () => {

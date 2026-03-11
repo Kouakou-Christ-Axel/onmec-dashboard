@@ -9,7 +9,7 @@ export const api = new Api({
   timeout: 10000, // Timeout de la requête
   maxRetries: 3, // Nombre de tentatives de re tentative
   retryDelay: 1000, // Delais entre les tentatives
-  enableAuth: true, // Authentification activée
+  enableAuth: true, // Authentification activé
   getSession: async () => {
     const session = await auth();
     const user = session?.user as User;
@@ -24,7 +24,7 @@ export const api = new Api({
     }
   },// Récupération du token
   signOut: async () => {
-    await logout()
+    // await logout()
   }, // Déconnexion automatique si la requête échoue avec un code 401
   debug: true, // Debug activé en mode développement
 });
