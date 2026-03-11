@@ -8,7 +8,6 @@ import { handleServerActionError } from "@/utils/handleServerActionError";
 
 export const ajouterQuizzAction = async (formdata: QuizzCreateDTO): Promise<ActionResponse<IQuizz>> => {
     try {
-        console.log(formdata, "formdata action")
         const data = await quizzApi.ajouterQuizz(formdata);
         return {
             success: true,

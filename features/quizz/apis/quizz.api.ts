@@ -10,7 +10,7 @@ export interface IQuizzAPI {
 
     ajouterQuizz(data: QuizzCreateDTO): Promise<IQuizz>;
 
-    //modifierQuizz(id: string, data: QuizzCreateDTO): Promise<IQuizz>;
+    modifierQuizz(id: string, data: QuizzCreateDTO): Promise<IQuizz>;
 }
 
 export const quizzApi: IQuizzAPI = {
@@ -32,6 +32,14 @@ export const quizzApi: IQuizzAPI = {
         return api.request<IQuizz>({
             endpoint: `/quizz`,
             method: "POST",
+            data: data,
+        });
+    },
+    
+    modifierQuizz(id: string, data: QuizzCreateDTO): Promise<IQuizz> {
+        return api.request<IQuizz>({
+            endpoint: `/quizz/${id}`,
+            method: "PUT",
             data: data,
         });
     }
