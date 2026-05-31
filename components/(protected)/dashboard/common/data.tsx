@@ -1,135 +1,57 @@
 import {
-	IconCamera,
-	IconChartBar,
 	IconDashboard,
-	IconDatabase,
-	IconFileAi,
-	IconFileDescription,
-	IconFileWord,
+	IconAlarmAverage,
 	IconFolder,
-	IconHelp,
-	IconReport,
-	IconSearch,
-	IconSettings,
 	IconBooks,
 	IconUsers,
-	IconUsersGroup,
-	IconAlarmAverage,
-} from "@tabler/icons-react";
+	IconHelp,
+	IconSettings,
+	IconBrain,
+} from '@tabler/icons-react';
 
 export const data = {
-	user: {
-		name: "shadcn",
-		email: "m@example.com",
-		avatar: "/avatars/shadcn.jpg",
-	},
 	navMain: [
 		{
-			title: "Dashboard",
-			url: "/dashboard",
+			title: 'Tableau de bord',
+			url: '/dashboard',
 			icon: IconDashboard,
 		},
 		{
-			title: "Signalements",
-			url: "/dashboard/signalements",
+			title: 'Signalements',
+			url: '/dashboard/signalements',
 			icon: IconAlarmAverage,
 		},
-		// {
-		//   title: "Users",
-		//   url: "/dashboard/utilisateurs",
-		//   icon: IconUsers,
-		// },
 		{
-			title: "Actualités",
-			url: "/dashboard/actualites",
+			title: 'Actualités',
+			url: '/dashboard/actualites',
 			icon: IconFolder,
 		},
 		{
-			title: "Librairie",
-			url: "/dashboard/librairie",
+			title: 'Librairie',
+			url: '/dashboard/librairie',
 			icon: IconBooks,
-		}
-	],
-	navClouds: [
-		{
-			title: "Capture",
-			icon: IconCamera,
-			isActive: true,
-			url: "#",
-			items: [
-				{
-					title: "Active Proposals",
-					url: "#",
-				},
-				{
-					title: "Archived",
-					url: "#",
-				},
-			],
 		},
 		{
-			title: "Proposal",
-			icon: IconFileDescription,
-			url: "#",
-			items: [
-				{
-					title: "Active Proposals",
-					url: "#",
-				},
-				{
-					title: "Archived",
-					url: "#",
-				},
-			],
+			title: 'Quiz',
+			url: '/dashboard/quizz',
+			icon: IconBrain,
 		},
 		{
-			title: "Prompts",
-			icon: IconFileAi,
-			url: "#",
-			items: [
-				{
-					title: "Active Proposals",
-					url: "#",
-				},
-				{
-					title: "Archived",
-					url: "#",
-				},
-			],
+			title: 'Utilisateurs',
+			url: '/dashboard/utilisateurs',
+			icon: IconUsers,
 		},
 	],
 	navSecondary: [
 		{
-			title: "Settings",
-			url: "#",
+			title: 'Paramètres',
+			url: '#',
 			icon: IconSettings,
 		},
 		{
-			title: "Get Help",
-			url: "#",
+			title: 'Aide',
+			url: '#',
 			icon: IconHelp,
-		},
-		{
-			title: "Search",
-			url: "#",
-			icon: IconSearch,
-		},
-	],
-	documents: [
-		{
-			name: "Data Library",
-			url: "#",
-			icon: IconDatabase,
-		},
-		{
-			name: "Reports",
-			url: "#",
-			icon: IconReport,
-		},
-		{
-			name: "Word Assistant",
-			url: "#",
-			icon: IconFileWord,
 		},
 	],
 };

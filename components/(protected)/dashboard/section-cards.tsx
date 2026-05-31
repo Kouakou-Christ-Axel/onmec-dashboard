@@ -1,102 +1,110 @@
-import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react"
+'use client';
 
-import { Badge } from "@/components/ui/badge"
 import {
-  Card,
-  CardAction,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+	IconAlarmAverage,
+	IconNews,
+	IconUsers,
+	IconAlertCircle,
+} from '@tabler/icons-react';
+import {Card, CardAction, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
+import {Badge} from '@/components/ui/badge';
+import {useQuery} from '@tanstack/react-query';
+import {signalementsApi} from '@/features/signalements/apis/signalements.api';
+import {actualiteApi} from '@/features/actualites/apis/actualite.api';
+import {obtenirTousUtilisateursAction} from '@/features/utilisateur/actions/utilisateur.action';
+
+function StatCard({
+	label,
+	value,
+	icon: Icon,
+	isLoading,
+}: {
+	label: string;
+	value?: number;
+	icon: React.ElementType;
+	isLoading: boolean;
+}) {
+	return (
+		<Card className="@container/card">
+			<CardHeader>
+				<CardDescription>{label}</CardDescription>
+				<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+					{isLoading ? (
+						<div className="h-8 w-20 animate-pulse rounded bg-default-200" />
+					) : (
+						(value ?? 0).toLocaleString('fr-FR')
+					)}
+				</CardTitle>
+				<CardAction>
+					<Badge variant="outline">
+						<Icon className="size-4" />
+					</Badge>
+				</CardAction>
+			</CardHeader>
+		</Card>
+	);
+}
 
 export function SectionCards() {
-  return (
-    <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4 lg:px-6">
-      <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>Total Revenue</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            $1,250.00
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-              <IconTrendingUp />
-              +12.5%
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Trending up this month <IconTrendingUp className="size-4" />
-          </div>
-          <div className="text-muted-foreground">
-            Visitors for the last 6 months
-          </div>
-        </CardFooter>
-      </Card>
-      <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>New Customers</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            1,234
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-              <IconTrendingDown />
-              -20%
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Down 20% this period <IconTrendingDown className="size-4" />
-          </div>
-          <div className="text-muted-foreground">
-            Acquisition needs attention
-          </div>
-        </CardFooter>
-      </Card>
-      <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>Active Accounts</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            45,678
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-              <IconTrendingUp />
-              +12.5%
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Strong user retention <IconTrendingUp className="size-4" />
-          </div>
-          <div className="text-muted-foreground">Engagement exceed targets</div>
-        </CardFooter>
-      </Card>
-      <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>Growth Rate</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            4.5%
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-              <IconTrendingUp />
-              +4.5%
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Steady performance increase <IconTrendingUp className="size-4" />
-          </div>
-          <div className="text-muted-foreground">Meets growth projections</div>
-        </CardFooter>
-      </Card>
-    </div>
-  )
+	const {data: signalementsTotal, isLoading: loadingSignalements} = useQuery({
+		queryKey: ['stats', 'signalements', 'total'],
+		queryFn: () => signalementsApi.obtenirTousLesSignalements({limit: 1, page: 1} as any),
+		staleTime: 2 * 60 * 1000,
+		select: (d) => d.meta.total,
+	});
+
+	const {data: signalementsNouveaux, isLoading: loadingNouveaux} = useQuery({
+		queryKey: ['stats', 'signalements', 'nouveau'],
+		queryFn: () =>
+			signalementsApi.obtenirTousLesSignalements({limit: 1, page: 1, statut: 'NOUVEAU'} as any),
+		staleTime: 2 * 60 * 1000,
+		select: (d) => d.meta.total,
+	});
+
+	const {data: actualitesTotal, isLoading: loadingActualites} = useQuery({
+		queryKey: ['stats', 'actualites'],
+		queryFn: () => actualiteApi.obtenirToutesActualites({limit: 1, page: 1} as any),
+		staleTime: 2 * 60 * 1000,
+		select: (d) => d.meta.total,
+	});
+
+	const {data: utilisateursTotal, isLoading: loadingUtilisateurs} = useQuery({
+		queryKey: ['stats', 'utilisateurs'],
+		queryFn: async () => {
+			const result = await obtenirTousUtilisateursAction({limit: 1, page: 1});
+			if (!result.success) throw new Error(result.error);
+			return result.data!;
+		},
+		staleTime: 2 * 60 * 1000,
+		select: (d) => d.meta.total,
+	});
+
+	return (
+		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4 lg:px-6">
+			<StatCard
+				label="Total signalements"
+				value={signalementsTotal}
+				icon={IconAlarmAverage}
+				isLoading={loadingSignalements}
+			/>
+			<StatCard
+				label="Signalements nouveaux"
+				value={signalementsNouveaux}
+				icon={IconAlertCircle}
+				isLoading={loadingNouveaux}
+			/>
+			<StatCard
+				label="Actualités publiées"
+				value={actualitesTotal}
+				icon={IconNews}
+				isLoading={loadingActualites}
+			/>
+			<StatCard
+				label="Utilisateurs"
+				value={utilisateursTotal}
+				icon={IconUsers}
+				isLoading={loadingUtilisateurs}
+			/>
+		</div>
+	);
 }
