@@ -3,7 +3,7 @@ import {
 	ICategorieSignalement,
 	ICreateCategorieSignalement,
 	IUpdateCategorieSignalement
-} from "@/features/signalements/type/categorie-signalement.types";
+} from "@/features/signalements/types/categorie-signalement.types";
 
 export interface ICategorieSignalementAPI {
 	obtenirTousLesCategories(): Promise<ICategorieSignalement[]>;

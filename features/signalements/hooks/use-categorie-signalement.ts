@@ -11,7 +11,7 @@ import {
 	ICategorieSignalement,
 	ICreateCategorieSignalement,
 	IUpdateCategorieSignalement
-} from "@/features/signalements/type/categorie-signalement.types";
+} from "@/features/signalements/types/categorie-signalement.types";
 
 export interface UseCategorieSignalementOptions {
 	onSuccess?: (message: string) => void;
@@ -62,7 +62,6 @@ export const useCategorieCategorieSignalement = (options?: UseCategorieSignaleme
 				throw new Error(result.message || 'Erreur lors de la création de la catégorie');
 			}
 
-			// Ajouter la nouvelle catégorie à la liste
 			setCategories([...categories, result.data!]);
 			options?.onSuccess?.(result.message || 'Catégorie créée avec succès');
 			return result.data;
@@ -89,7 +88,6 @@ export const useCategorieCategorieSignalement = (options?: UseCategorieSignaleme
 				throw new Error(result.message || 'Erreur lors de la modification de la catégorie');
 			}
 
-			// Mettre à jour la catégorie dans la liste
 			setCategories(
 				categories.map((cat) => (cat.id === id ? result.data! : cat))
 			);
@@ -118,7 +116,6 @@ export const useCategorieCategorieSignalement = (options?: UseCategorieSignaleme
 				throw new Error(result.message || 'Erreur lors de la suppression de la catégorie');
 			}
 
-			// Supprimer la catégorie de la liste
 			setCategories(categories.filter((cat) => cat.id !== id));
 			options?.onSuccess?.(result.message || 'Catégorie supprimée avec succès');
 		} catch (err) {
@@ -131,19 +128,15 @@ export const useCategorieCategorieSignalement = (options?: UseCategorieSignaleme
 		}
 	};
 
-	// Charger les catégories au premier rendu
 	useEffect(() => {
 		loadCategories();
 	}, []);
 
 	return {
-		// État
 		categories,
 		isLoading,
 		error,
 		setError,
-
-		// Opérations
 		loadCategories,
 		createCategorie,
 		updateCategorie,

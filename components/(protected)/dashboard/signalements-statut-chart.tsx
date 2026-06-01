@@ -52,7 +52,7 @@ export function SignalementsStatutChart() {
 							<CartesianGrid vertical={false} />
 							<XAxis
 								dataKey="statut"
-								ticklLine={false}
+								tickLine={false}
 								axisLine={false}
 								tickMargin={8}
 							/>
