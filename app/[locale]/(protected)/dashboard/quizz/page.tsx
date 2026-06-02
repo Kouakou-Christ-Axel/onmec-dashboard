@@ -1,3 +1,5 @@
+'use client';
+
 import Content from '@/components/primitives/Content';
 import Title from '@/components/primitives/Title';
 import Subtitle from '@/components/primitives/Subtitle';
