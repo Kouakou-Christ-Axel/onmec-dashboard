@@ -1,11 +1,11 @@
 "use client";
 import React from 'react';
-import {Spinner} from "@heroui/react";
+import {Spinner, Pagination} from "@heroui/react";
 import ActualiteCard from "./actualite-card";
 import {useActualiteList} from "@/features/actualites/hooks/use-actualite-list";
 
 function ActualitesCardList() {
-	const {actualites, isLoading, isError} = useActualiteList();
+	const {actualites, meta, isLoading, isError, handlePageChange} = useActualiteList();
 
 	if (isLoading) {
 		return (
@@ -23,7 +23,7 @@ function ActualitesCardList() {
 		);
 	}
 
-	if (!actualites || actualites.length === 0) {
+	if (actualites.length === 0) {
 		return (
 			<div className="text-center text-default-500 py-8">
 				Aucune actualité trouvée.
@@ -32,10 +32,23 @@ function ActualitesCardList() {
 	}
 
 	return (
-		<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-			{actualites.map((actualite) => (
-				<ActualiteCard key={actualite.id} actualite={actualite}/>
-			))}
+		<div className="flex flex-col gap-6">
+			<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+				{actualites.map((actualite) => (
+					<ActualiteCard key={actualite.id} actualite={actualite}/>
+				))}
+			</div>
+			{meta && meta.totalPages > 1 && (
+				<div className="flex justify-center pb-4">
+					<Pagination
+						total={meta.totalPages}
+						page={meta.page}
+						onChange={handlePageChange}
+						showControls
+						color="primary"
+					/>
+				</div>
+			)}
 		</div>
 	);
 }

@@ -1,27 +1,25 @@
 FROM node:20-alpine AS base
 RUN apk add --no-cache libc6-compat
 
-# 1. Install dependencies only when needed
 FROM base AS deps
-
 WORKDIR /app
-
-# Install dependencies based on the preferred package manager
 COPY package.json pnpm-lock.yaml ./
-RUN corepack enable pnpm && pnpm i --frozen-lockfile;
+RUN corepack enable pnpm && pnpm i --frozen-lockfile
 
-
-# 2. Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# This will do the trick, use the corresponding env file for each environment.
-COPY .env.production.sample .env.production
+
+# Public vars are baked at build time — pass via --build-arg
+ARG NEXT_PUBLIC_URL
+ARG NEXT_PUBLIC_API_BACKEND_URL
+ENV NEXT_PUBLIC_URL=$NEXT_PUBLIC_URL
+ENV NEXT_PUBLIC_API_BACKEND_URL=$NEXT_PUBLIC_API_BACKEND_URL
+
 RUN corepack enable pnpm && pnpm run build
 
-# 3. Production image, copy all the files and run next
 FROM node:20-alpine AS runner
 WORKDIR /app
 
@@ -35,7 +33,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 USER nextjs
 
 EXPOSE 3000
-
 ENV PORT=3000
 
+# AUTH_SECRET and other secrets are injected at runtime via env vars or secrets manager
 CMD HOSTNAME="0.0.0.0" node server.js
