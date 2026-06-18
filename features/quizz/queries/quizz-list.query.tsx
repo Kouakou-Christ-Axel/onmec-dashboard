@@ -1,5 +1,5 @@
 import getQueryClient from "@/lib/get-query-client";
-import { IQuizz } from "../types/quizz.type";
+import { IQuizzSearchParams } from "../types/quizz.type";
 import { quizzKeyQuery } from "./index.query";
 import { obtenirTousQuizzAction } from "../actions/quizz.actions";
 import { useQuery } from "@tanstack/react-query";
@@ -10,7 +10,7 @@ import { X } from "lucide-react";
 const queryClient = getQueryClient();
 
 //1- Option de requête optimisée
-export const quizzListQueryOption = (quizzParamsDTO: IQuizz) => {
+export const quizzListQueryOption = (quizzParamsDTO: IQuizzSearchParams) => {
   return {
     queryKey: quizzKeyQuery("list", quizzParamsDTO),
     queryFn: async () => {
@@ -30,8 +30,8 @@ export const quizzListQueryOption = (quizzParamsDTO: IQuizz) => {
 }
 
 //2- Hook pour récupérer les quizz
-export const useActualitesListQuery = (
-  quizzParamsDTO: IQuizz
+export const useQuizzListQuery = (
+  quizzParamsDTO: IQuizzSearchParams
 ) => {
   const query = useQuery(quizzListQueryOption(quizzParamsDTO));
 
@@ -54,8 +54,8 @@ export const useActualitesListQuery = (
 };
 
 //3- Fonction pour précharger les quizz appelée dans les pages
-export const prefetchActualitesListQuery = (
-  quizzParamsDTO: IQuizz
+export const prefetchQuizzListQuery = (
+  quizzParamsDTO: IQuizzSearchParams
 ) => {
   return queryClient.prefetchQuery(
     quizzListQueryOption(quizzParamsDTO)

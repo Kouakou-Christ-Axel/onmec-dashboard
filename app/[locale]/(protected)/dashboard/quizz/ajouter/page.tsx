@@ -1,13 +1,16 @@
 "use client";
 
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { QuizzSchema, QuizzCreateDTO } from "@/features/quizz/schema/quizz.schema";
 import { Button } from "@heroui/button";
+import { Select, SelectItem } from "@heroui/react";
 import QuestionItem from "@/components/quizz/question-item";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useAjouterQuizzMutation } from "@/features/quizz/queries/quizz-add.mutation";
+import { useCategoriesQuizzQuery } from "@/features/quizz/queries/categories-list.query";
+import { QUIZ_DIFFICULTES } from "@/features/quizz/types/quizz.type";
 import { useRouter } from "@/i18n/navigation";
 
 
@@ -19,6 +22,8 @@ export default function AjouterQuizz() {
             title: "",
             description: "",
             authorId: "1",
+            categorieId: "",
+            difficulte: undefined,
             questions: [
                 {
                     text: "",
@@ -53,6 +58,8 @@ export default function AjouterQuizz() {
         isPending: isAddingQuizz
     } = useAjouterQuizzMutation()
 
+    const { data: categories } = useCategoriesQuizzQuery();
+
     const isLoading = isAddingQuizz || form.formState.isSubmitting;
 
     const onSubmit = async (data: QuizzCreateDTO) => {
@@ -85,6 +92,53 @@ export default function AjouterQuizz() {
                     {...register("description")}
                     placeholder="Description"
                 />
+            </div>
+
+            {/* CATEGORIE & DIFFICULTE */}
+            <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex-1">
+                    <Controller
+                        control={control}
+                        name="categorieId"
+                        render={({ field }) => (
+                            <Select
+                                label="Catégorie"
+                                placeholder="Choisir une catégorie"
+                                variant="bordered"
+                                selectedKeys={field.value ? [field.value] : []}
+                                onSelectionChange={(keys) =>
+                                    field.onChange((Array.from(keys)[0] as string) ?? "")
+                                }
+                            >
+                                {(categories ?? []).map((categorie) => (
+                                    <SelectItem key={categorie.id}>{categorie.nom}</SelectItem>
+                                ))}
+                            </Select>
+                        )}
+                    />
+                </div>
+
+                <div className="flex-1">
+                    <Controller
+                        control={control}
+                        name="difficulte"
+                        render={({ field }) => (
+                            <Select
+                                label="Difficulté"
+                                placeholder="Choisir une difficulté"
+                                variant="bordered"
+                                selectedKeys={field.value ? [field.value] : []}
+                                onSelectionChange={(keys) =>
+                                    field.onChange((Array.from(keys)[0] as string) || undefined)
+                                }
+                            >
+                                {QUIZ_DIFFICULTES.map((difficulte) => (
+                                    <SelectItem key={difficulte}>{difficulte}</SelectItem>
+                                ))}
+                            </Select>
+                        )}
+                    />
+                </div>
             </div>
 
             {/* QUESTIONS */}
