@@ -39,6 +39,10 @@ export const QuizzSchema = z.object({
     authorId: z.string()
         .min(1, "AuthorId est obligatoire"),
 
+    difficulte: z.enum(["FACILE", "MOYEN", "DIFFICILE"]).optional(),
+
+    categorieId: z.string().optional(),
+
     questions: z.array(QuestionSchema)
         .min(1, "Le quizz doit contenir au moins une question")
 });
