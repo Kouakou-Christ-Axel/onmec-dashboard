@@ -1,9 +1,25 @@
 "use client";
 
-import React from "react";
-import { Card, CardBody, Chip, Pagination, Spinner } from "@heroui/react";
+import React, { useState } from "react";
+import {
+	Button,
+	Card,
+	CardBody,
+	CardFooter,
+	Chip,
+	Modal,
+	ModalBody,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	Pagination,
+	Spinner,
+} from "@heroui/react";
+import { Pencil, Trash } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import useQuizzFilters from "@/features/quizz/hooks/use-quizz-filters";
 import { useQuizzListQuery } from "@/features/quizz/queries/quizz-list.query";
+import { useSupprimerQuizzMutation } from "@/features/quizz/queries/quizz-delete.mutation";
 import { IQuizz, QuizDifficulte } from "@/features/quizz/types/quizz.type";
 
 const difficulteColor: Record<QuizDifficulte, "success" | "warning" | "danger"> = {
@@ -15,9 +31,17 @@ const difficulteColor: Record<QuizDifficulte, "success" | "warning" | "danger"> 
 function QuizzList() {
 	const { currentSearchParams, handlePageChange } = useQuizzFilters();
 	const { data, isLoading, isError, error } = useQuizzListQuery(currentSearchParams);
+	const { mutateAsync: supprimer, isPending: isDeleting } = useSupprimerQuizzMutation();
+
+	const [toDelete, setToDelete] = useState<IQuizz | null>(null);
 
 	const quizzes: IQuizz[] = data?.data ?? [];
 	const meta = data?.meta;
+
+	const confirmDelete = async () => {
+		if (!toDelete?.id) return;
+		await supprimer({ id: toDelete.id }, { onSuccess: () => setToDelete(null) });
+	};
 
 	if (isLoading) {
 		return (
@@ -85,6 +109,27 @@ function QuizzList() {
 								)}
 							</div>
 						</CardBody>
+
+						<CardFooter className="justify-end gap-2 pt-0">
+							<Button
+								size="sm"
+								variant="flat"
+								startContent={<Pencil className="w-4 h-4" />}
+								as={Link}
+								href={`/dashboard/quizz/${quiz.id}/modifier`}
+							>
+								Éditer
+							</Button>
+							<Button
+								size="sm"
+								variant="flat"
+								color="danger"
+								startContent={<Trash className="w-4 h-4" />}
+								onPress={() => setToDelete(quiz)}
+							>
+								Supprimer
+							</Button>
+						</CardFooter>
 					</Card>
 				))}
 			</div>
@@ -100,6 +145,28 @@ function QuizzList() {
 					/>
 				</div>
 			)}
+
+			{/* Confirmation de suppression */}
+			<Modal isOpen={Boolean(toDelete)} onClose={() => setToDelete(null)} placement="center">
+				<ModalContent>
+					<ModalHeader>Supprimer le quiz</ModalHeader>
+					<ModalBody>
+						<p>
+							Voulez-vous vraiment supprimer le quiz{" "}
+							<strong>{toDelete?.title}</strong> ? Cette action supprime aussi ses
+							questions et les résultats associés. Elle est irréversible.
+						</p>
+					</ModalBody>
+					<ModalFooter>
+						<Button variant="light" onPress={() => setToDelete(null)} disabled={isDeleting}>
+							Annuler
+						</Button>
+						<Button color="danger" onPress={confirmDelete} isLoading={isDeleting}>
+							Supprimer
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
 		</div>
 	);
 }

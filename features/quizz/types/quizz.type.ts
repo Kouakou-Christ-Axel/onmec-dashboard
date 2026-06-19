@@ -3,12 +3,15 @@ export type QuizDifficulte = 'FACILE' | 'MOYEN' | 'DIFFICILE';
 export const QUIZ_DIFFICULTES: QuizDifficulte[] = ['FACILE', 'MOYEN', 'DIFFICILE'];
 
 export interface IChoice {
+	id?: string;
 	text: string;
 	isCorrect: boolean;
 }
 
 export interface IQuestion {
+	id?: string;
 	text: string;
+	correctId?: string | null;
 	choices: IChoice[];
 }
 
