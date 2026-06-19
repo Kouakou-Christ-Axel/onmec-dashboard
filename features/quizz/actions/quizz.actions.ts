@@ -47,6 +47,31 @@ export const obtenirTousQuizzAction = async (params: IQuizzSearchParams): Promis
     }
 }
 
+export const modifierQuizzAction = async (id: string, formdata: QuizzCreateDTO): Promise<ActionResponse<IQuizz>> => {
+    try {
+        const data = await quizzApi.modifierQuizz(id, formdata);
+        return {
+            success: true,
+            data: data,
+            message: "Quizz modifié avec succès",
+        }
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la modification du quizz");
+    }
+}
+
+export const supprimerQuizzAction = async (id: string): Promise<ActionResponse<void>> => {
+    try {
+        await quizzApi.supprimerQuizz(id);
+        return {
+            success: true,
+            message: "Quizz supprimé avec succès",
+        }
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la suppression du quizz");
+    }
+}
+
 // ---- Catégories de quizz ----
 
 export const obtenirCategoriesQuizzAction = async (): Promise<ActionResponse<ICategorieQuiz[]>> => {

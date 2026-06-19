@@ -13,6 +13,8 @@ export interface IQuizzAPI {
 
     modifierQuizz(id: string, data: QuizzCreateDTO): Promise<IQuizz>;
 
+    supprimerQuizz(id: string): Promise<void>;
+
     // Catégories de quizz
     obtenirCategories(): Promise<ICategorieQuiz[]>;
 
@@ -50,8 +52,15 @@ export const quizzApi: IQuizzAPI = {
     modifierQuizz(id: string, data: QuizzCreateDTO): Promise<IQuizz> {
         return api.request<IQuizz>({
             endpoint: `/quizz/${id}`,
-            method: "PUT",
+            method: "PATCH",
             data: data,
+        });
+    },
+
+    supprimerQuizz(id: string): Promise<void> {
+        return api.request<void>({
+            endpoint: `/quizz/${id}`,
+            method: "DELETE",
         });
     },
 
