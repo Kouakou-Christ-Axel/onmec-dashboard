@@ -16,11 +16,6 @@ export function getUtilisateurStatus(status: UtilisateurStatus): {
                 label: "Verrouillé",
                 color: "warning",
             };
-        case UtilisateurStatus.DELETED:
-            return {
-                label: "Supprimé",
-                color: "danger",
-            };
         default:
             return {
                 label: "Inconnu",

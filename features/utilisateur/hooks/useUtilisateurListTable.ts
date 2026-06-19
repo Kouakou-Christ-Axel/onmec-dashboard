@@ -10,7 +10,7 @@ import {
 import { useQueryStates } from 'nuqs';
 import { utilisateurFiltersClient } from '../filters/utilisateur.filters';
 import { useUtilisateursListQuery } from "../queries/utilisateur-list.query";
-import { IUtilisateur, IUtilisateursParams } from "../types/utilisateur.type";
+import { IUtilisateur, IUtilisateursParams, UtilisateurRole, UtilisateurStatus } from "../types/utilisateur.type";
 
 export interface IUtilisateurListTableProps {
     columns: ColumnDef<IUtilisateur>[];
@@ -30,11 +30,8 @@ export function useUtilisateurListTable({ columns }: IUtilisateurListTableProps)
         return {
             page: filters.page,
             limit: filters.limit,
-            firstName: filters.firstName || undefined,
-            lastName: filters.lastName || undefined,
-            email: filters.email || undefined,
-            phoneNumber: filters.phoneNumber || undefined,
-            status: filters.status,
+            search: filters.search || undefined,
+            status: filters.status || undefined,
             role: filters.role || undefined,
         };
     }, [filters]);
@@ -68,11 +65,10 @@ export function useUtilisateurListTable({ columns }: IUtilisateurListTableProps)
     }, []);
 
     /**
-     * Gère les changements pour les champs de filtre textuels
-     * Nuqs throttle automatiquement les mises à jour URL/serveur
+     * Gère les changements pour le champ de recherche textuel
      */
     const handleTextFilterChange = useCallback((
-        filterName: 'firstName' | 'lastName' | 'email' | 'phoneNumber',
+        filterName: 'search',
         value: string
     ) => {
         setFilters(prev => ({
@@ -83,8 +79,7 @@ export function useUtilisateurListTable({ columns }: IUtilisateurListTableProps)
     }, [setFilters]);
 
     /**
-     * Gère les changements pour les champs de filtre d'enum
-     * Pas de throttling nécessaire pour ces filtres (changements moins fréquents)
+     * Gère les changements pour les champs de filtre d'enum (statut, rôle)
      */
     const handleEnumFilterChange = useCallback((
         filterName: 'status' | 'role',
@@ -92,7 +87,7 @@ export function useUtilisateurListTable({ columns }: IUtilisateurListTableProps)
     ) => {
         setFilters(prev => ({
             ...prev,
-            [filterName]: value,
+            [filterName]: (value || null) as UtilisateurStatus & UtilisateurRole | null,
             page: 1,
         }));
     }, [setFilters]);

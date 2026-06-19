@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { SquarePen, Trash2 } from "lucide-react";
+import { Lock, SquarePen, Trash2, Unlock } from "lucide-react";
 
 import {
   IUtilisateur,
@@ -14,13 +14,11 @@ import { Button, Chip, Tooltip, User } from "@heroui/react";
 
 export const columns: ColumnDef<IUtilisateur>[] = [
   {
-    accessorKey: "firstName",
+    accessorKey: "fullname",
     header: "Nom Complet",
     cell: ({ row }) => {
       const user = row.original;
-      return (
-        <User name={`${user.fullname}`}>{user.email}</User>
-      );
+      return <User name={`${user.fullname}`}>{user.email}</User>;
     },
   },
   {
@@ -29,16 +27,16 @@ export const columns: ColumnDef<IUtilisateur>[] = [
     cell: ({ row }) => <span>{row.getValue("email")}</span>,
   },
   {
-    accessorKey: "phoneNumber",
+    accessorKey: "phone",
     header: "Téléphone",
-    cell: ({ row }) => <span>{row.getValue("phoneNumber")}</span>,
+    cell: ({ row }) => <span>{row.getValue("phone") || "—"}</span>,
   },
   {
     accessorKey: "role",
     header: "Rôle",
     cell: ({ row }) => {
       const role = row.getValue<UtilisateurRole>("role");
-      const roleName = getUtilisateurRole(role) || "Inconnu";
+      const roleName = getUtilisateurRole(role);
 
       return (
         <Chip
@@ -53,11 +51,13 @@ export const columns: ColumnDef<IUtilisateur>[] = [
     },
   },
   {
-    accessorKey: "status",
+    id: "status",
     header: "Statut",
-    cell: ({ row }) => {
-      const status = row.getValue<UtilisateurStatus>("status");
-      const statusName = getUtilisateurStatus(status) || "Inconnu";
+    accessorFn: (row) =>
+      row.deletedAt ? UtilisateurStatus.INACTIVE : UtilisateurStatus.ACTIVE,
+    cell: ({ getValue }) => {
+      const status = getValue<UtilisateurStatus>();
+      const statusName = getUtilisateurStatus(status);
       return (
         <Chip
           className="capitalize"
@@ -76,9 +76,9 @@ export const columns: ColumnDef<IUtilisateur>[] = [
     enableHiding: false,
     cell: ({ row, table }) => {
       const user = row.original as IUtilisateur;
+      const isLocked = Boolean(user.deletedAt);
 
       const meta = table.options.meta as {
-        onView: (user: IUtilisateur) => void;
         onEdit: (user: IUtilisateur) => void;
         onDelete: (user: IUtilisateur) => void;
         onLockUnlock: (user: IUtilisateur) => void;
@@ -86,7 +86,7 @@ export const columns: ColumnDef<IUtilisateur>[] = [
 
       return (
         <div className="relative flex items-center gap-2">
-          <Tooltip content="Activer">
+          <Tooltip content="Modifier">
             <Button
               variant="bordered"
               isIconOnly
@@ -97,9 +97,26 @@ export const columns: ColumnDef<IUtilisateur>[] = [
             </Button>
           </Tooltip>
 
+          <Tooltip content={isLocked ? "Déverrouiller" : "Verrouiller"}>
+            <Button
+              variant="bordered"
+              color={isLocked ? "success" : "warning"}
+              isIconOnly
+              onPress={() => meta.onLockUnlock(user)}
+              size="sm"
+            >
+              {isLocked ? (
+                <Unlock className="w-4 h-4" />
+              ) : (
+                <Lock className="w-4 h-4" />
+              )}
+            </Button>
+          </Tooltip>
+
           <Tooltip content="Supprimer">
             <Button
               variant="bordered"
+              color="danger"
               isIconOnly
               onPress={() => meta.onDelete(user)}
               size="sm"
