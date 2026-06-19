@@ -99,7 +99,7 @@ export const categorieSignalementTableColumns: ColumnDef<ICategorieSignalement>[
 						<DropdownMenuGroup>
 							<DropdownMenuItem asChild>
 								<Link
-									href={`/dashboard/categories-signalement/${row.original.id}/modifier`}
+									href={`/dashboard/signalements/categories/${row.original.id}/modifier`}
 									className="w-full cursor-pointer"
 								>
 									Modifier

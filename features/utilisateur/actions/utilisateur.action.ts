@@ -70,3 +70,16 @@ export const supprimerUtilisateurAction = async (id: string): Promise<ActionResp
         return handleServerActionError(error, "Erreur lors de la suppression de l'utilisateur");
     }
 }
+
+export const verrouillerUtilisateurAction = async (id: string, locked: boolean): Promise<ActionResponse<IUtilisateur>> => {
+    try {
+        const data = await utilisateurAPI.verrouillerUtilisateur(id, locked);
+        return {
+            success: true,
+            data: data,
+            message: locked ? "Utilisateur verrouillé avec succès" : "Utilisateur déverrouillé avec succès",
+        }
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors du changement d'état de l'utilisateur");
+    }
+}

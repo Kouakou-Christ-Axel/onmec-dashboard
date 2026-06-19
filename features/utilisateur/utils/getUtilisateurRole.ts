@@ -6,15 +6,15 @@ export function getUtilisateurRole(role: UtilisateurRole): {
     color: "primary" | "default" | "secondary" | "success" | "warning" | "danger" | undefined;
 } {
     switch (role) {
-        case UtilisateurRole.AGENT:
-            return {
-                label: "Agent",
-                color: "warning",
-            };
         case UtilisateurRole.ADMIN:
             return {
                 label: "Administrateur",
                 color: "success",
+            };
+        case UtilisateurRole.MEMBER:
+            return {
+                label: "Membre",
+                color: "primary",
             };
         default:
             return {

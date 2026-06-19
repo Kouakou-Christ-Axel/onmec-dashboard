@@ -11,6 +11,7 @@ export interface IUtilisateurAPI {
     obtenirUtilisateur(id: string): Promise<IUtilisateur>;
     ajouterUtilisateur(data: UtilisateurAddDTO): Promise<IUtilisateurAddUpdateResponse>;
     modifierProfil(id: string, data: UtilisateurUpdateDTO): Promise<IUtilisateurAddUpdateResponse>;
+    verrouillerUtilisateur(id: string, locked: boolean): Promise<IUtilisateur>;
     supprimerUtilisateur(id: string): Promise<IUtilisateurDeleteResponse>;
 }
 
@@ -41,6 +42,13 @@ export const utilisateurAPI: IUtilisateurAPI = {
             endpoint: `/users/${id}/profile`,
             method: "PATCH",
             data,
+        });
+    },
+    verrouillerUtilisateur(id: string, locked: boolean): Promise<IUtilisateur> {
+        return api.request<IUtilisateur>({
+            endpoint: `/users/${id}/lock`,
+            method: "PATCH",
+            data: { locked },
         });
     },
     supprimerUtilisateur(id: string): Promise<IUtilisateurDeleteResponse> {

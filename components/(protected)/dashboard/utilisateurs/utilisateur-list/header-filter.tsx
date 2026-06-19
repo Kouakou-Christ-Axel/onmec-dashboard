@@ -32,14 +32,14 @@ export function HeaderFilter({
   modalHandlers: any;
 }) {
   // Compter les filtres actifs
-  const activeFiltersCount = Object.values(filters).filter(
-    (value) => value && value !== ""
+  const activeFiltersCount = Object.entries(filters).filter(
+    ([key, value]) =>
+      !["page", "limit"].includes(key) && value && value !== ""
   ).length;
 
   // Fonction pour reset tous les filtres
   const handleClearAllFilters = () => {
-    handleTextFilterChange("email", "");
-    handleTextFilterChange("phoneNumber", "");
+    handleTextFilterChange("search", "");
     handleEnumFilterChange("status", "");
     handleEnumFilterChange("role", "");
   };
@@ -50,9 +50,7 @@ export function HeaderFilter({
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
         <div>
           <Title>Utilisateurs</Title>
-          <Subtitle>
-            Gérez vos utilisateurs et leurs permissions
-          </Subtitle>
+          <Subtitle>Gérez vos utilisateurs et leurs permissions</Subtitle>
         </div>
         <Button
           color="primary"
@@ -71,39 +69,26 @@ export function HeaderFilter({
             {/* Barre de recherche principale */}
             <div className="relative">
               <Input
-                placeholder="Rechercher par email, nom ou téléphone..."
-                value={filters.email}
-                onChange={(e) =>
-                  handleTextFilterChange("email", e.target.value)
-                }
+                placeholder="Rechercher par nom, email ou téléphone..."
+                value={filters.search}
+                onChange={(e) => handleTextFilterChange("search", e.target.value)}
                 startContent={<Search className="w-4 h-4" />}
                 variant="bordered"
+                isClearable
+                onClear={() => handleTextFilterChange("search", "")}
               />
             </div>
 
             {/* Filtres avancés */}
             <div className="flex flex-col lg:flex-row gap-4">
-              {/* Filtre par téléphone */}
-              <div className="flex-1">
-                <Input
-                  label="Téléphone"
-                  placeholder="Filtrer par téléphone..."
-                  value={filters.phoneNumber}
-                  onChange={(e) =>
-                    handleTextFilterChange("phoneNumber", e.target.value)
-                  }
-                  variant="bordered"
-                />
-              </div>
-
               {/* Filtre par statut */}
               <div className="flex-1">
                 <Select
                   label="Statut"
                   placeholder="Sélectionner un statut"
-                  selectedKeys={filters.status ? [filters.status] : ["_all_"]}
+                  selectedKeys={filters.status ? [filters.status] : []}
                   onSelectionChange={(keys) => {
-                    const value = Array.from(keys)[0] as string;
+                    const value = (Array.from(keys)[0] as string) ?? "";
                     handleEnumFilterChange("status", value);
                   }}
                   variant="bordered"
@@ -121,9 +106,9 @@ export function HeaderFilter({
                 <Select
                   label="Rôle"
                   placeholder="Sélectionner un rôle"
-                  selectedKeys={filters.role ? [filters.role] : ["_all_"]}
+                  selectedKeys={filters.role ? [filters.role] : []}
                   onSelectionChange={(keys) => {
-                    const value = Array.from(keys)[0] as string;
+                    const value = (Array.from(keys)[0] as string) ?? "";
                     handleEnumFilterChange("role", value);
                   }}
                   variant="bordered"
@@ -145,29 +130,18 @@ export function HeaderFilter({
                     Filtres actifs:
                   </span>
 
-                  {filters.email && (
+                  {filters.search && (
                     <Chip
                       size="sm"
                       variant="flat"
                       color="primary"
-                      onClose={() => handleTextFilterChange("email", "")}
+                      onClose={() => handleTextFilterChange("search", "")}
                     >
-                      Email: {filters.email}
+                      Recherche: {filters.search}
                     </Chip>
                   )}
 
-                  {filters.phoneNumber && (
-                    <Chip
-                      size="sm"
-                      variant="flat"
-                      color="primary"
-                      onClose={() => handleTextFilterChange("phoneNumber", "")}
-                    >
-                      Tél: {filters.phoneNumber}
-                    </Chip>
-                  )}
-
-                  {filters.status && filters.status !== null && (
+                  {filters.status && (
                     <Chip
                       size="sm"
                       variant="flat"
@@ -178,7 +152,7 @@ export function HeaderFilter({
                     </Chip>
                   )}
 
-                  {filters.role && filters.role !== null && (
+                  {filters.role && (
                     <Chip
                       size="sm"
                       variant="flat"

@@ -2,14 +2,9 @@ import { z } from 'zod';
 
 // Schema pour l'ajout d'un utilisateur
 export const UtilisateurAddSchema = z.object({
-  firstName: z.string({ message: "Le prénom est requis" })
-    .min(2, "Le prénom doit contenir au moins 2 caractères")
-    .max(100, "Le prénom ne doit pas dépasser 100 caractères")
-    .trim(),
-
-  lastName: z.string({ message: "Le nom est requis" })
-    .min(2, "Le nom doit contenir au moins 2 caractères")
-    .max(100, "Le nom ne doit pas dépasser 100 caractères")
+  fullname: z.string({ message: "Le nom complet est requis" })
+    .min(2, "Le nom complet doit contenir au moins 2 caractères")
+    .max(100, "Le nom complet ne doit pas dépasser 100 caractères")
     .trim(),
 
   email: z.string({ message: "L'email est requis" })
@@ -18,12 +13,12 @@ export const UtilisateurAddSchema = z.object({
     .toLowerCase()
     .trim(),
 
-  phoneNumber: z.string({ message: "Le numéro de téléphone est requis" })
+  phone: z.string({ message: "Le numéro de téléphone est requis" })
     .max(20, "Le numéro de téléphone ne doit pas dépasser 20 caractères")
     .regex(/^\+?[\d\s\-]+$/, "Numéro de téléphone invalide")
     .trim(),
 
-  role: z.enum(['AGENT', 'CHEF_SERVICE', 'CONSUL', 'ADMIN'], { message: "Le rôle est requis" })
+  role: z.enum(['ADMIN', 'MEMBER'], { message: "Le rôle est requis" })
 });
 
 export type UtilisateurAddDTO = z.infer<typeof UtilisateurAddSchema>;
