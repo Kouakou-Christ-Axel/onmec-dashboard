@@ -1,18 +1,9 @@
 import {ColumnDef} from "@tanstack/react-table";
-import {ISignalement, supprimerSignalementAction} from "@/features/signalements";
-import Link from "next/link";
-import {CheckCircle2, Clock, Loader2, MapPin, MoreHorizontal} from "lucide-react";
+import {ISignalement} from "@/features/signalements";
+import {CheckCircle2, Clock, MapPin} from "lucide-react";
 import {formatDateTime} from "@/utils/date.utils";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuGroup,
-	DropdownMenuItem,
-	DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
-import {Button} from "@/components/ui/button";
 import {Badge} from "@/components/ui/badge";
-import {useState} from "react";
+import SignalementRowActions from "./signalement-row-actions";
 
 // Mapping des statuts avec couleurs
 const statutConfig = {
@@ -121,68 +112,7 @@ export const signalementCitoyenTableColumns: ColumnDef<ISignalement>[] = [
 	{
 		id: 'actions',
 		header: 'Actions',
-		cell: ({row}) => {
-			const [isPending, setIsPending] = useState(false);
-
-			const handleSupprimer = async () => {
-				// Confirmation utilisateur avant suppression
-				const confirmed = typeof window !== 'undefined'
-					? window.confirm(`Voulez-vous vraiment supprimer le signalement « ${row.original.titre} » ?`)
-					: true;
-
-				if (!confirmed) return;
-
-				setIsPending(true);
-				try {
-					await supprimerSignalementAction(row.original.id);
-				} catch (error) {
-					console.error('Erreur lors de la suppression:', error);
-				} finally {
-					setIsPending(false);
-				}
-			};
-
-			return (
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="ghost" className="h-8 w-8 p-0">
-							<span className="sr-only">Ouvrir le menu</span>
-							<MoreHorizontal className="h-4 w-4" />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
-						<DropdownMenuGroup>
-							<DropdownMenuItem asChild>
-								<Link
-									href={`/dashboard/signalements-citoyen/${row.original.id}`}
-									className="w-full cursor-pointer"
-								>
-									Voir les détails
-								</Link>
-							</DropdownMenuItem>
-							<DropdownMenuItem asChild>
-								<Link
-									href={`/dashboard/signalements-citoyen/${row.original.id}/modifier`}
-									className="w-full cursor-pointer"
-								>
-									Modifier
-								</Link>
-							</DropdownMenuItem>
-							<DropdownMenuItem
-								disabled={isPending}
-								onClick={handleSupprimer}
-								className="text-red-600 focus:text-red-600 cursor-pointer"
-							>
-								<Loader2
-									className={`mr-2 h-4 w-4 ${isPending ? 'animate-spin' : 'hidden'}`}
-								/>
-								<span>Supprimer</span>
-							</DropdownMenuItem>
-						</DropdownMenuGroup>
-					</DropdownMenuContent>
-				</DropdownMenu>
-			);
-		}
+		cell: ({row}) => <SignalementRowActions signalement={row.original} />
 	}
 ];
 

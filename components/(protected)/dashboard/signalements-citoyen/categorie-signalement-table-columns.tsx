@@ -1,19 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ICategorieSignalement } from "@/features/signalements";
-import Link from "next/link";
-import { Loader2, MoreHorizontal, CheckCircle2, XCircle } from "lucide-react";
+import { CheckCircle2, XCircle } from "lucide-react";
 import { formatDateTime } from "@/utils/date.utils";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuGroup,
-	DropdownMenuItem,
-	DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { supprimerCategorieAction } from "@/features/signalements";
-import { useState } from "react";
+import CategorieSignalementRowActions from "./categorie-signalement-row-actions";
 
 export const categorieSignalementTableColumns: ColumnDef<ICategorieSignalement>[] = [
 	{
@@ -63,63 +53,9 @@ export const categorieSignalementTableColumns: ColumnDef<ICategorieSignalement>[
 		)
 	},
 	{
-		
 		id: 'actions',
 		header: 'Actions',
-		cell: ({ row }) => {
-			const [isPending, setIsPending] = useState(false);
-
-			const handleSupprimer = async () => {
-				// Confirmation utilisateur avant suppression
-				const confirmed = typeof window !== 'undefined'
-					? window.confirm(`Voulez-vous vraiment supprimer la catégorie « ${row.original.nom} » ?`)
-					: true;
-
-				if (!confirmed) return;
-
-				setIsPending(true);
-				try {
-					await supprimerCategorieAction(row.original.id);
-				} catch (error) {
-					console.error('Erreur lors de la suppression:', error);
-				} finally {
-					setIsPending(false);
-				}
-			};
-
-			return (
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="ghost" className="h-8 w-8 p-0">
-							<span className="sr-only">Ouvrir le menu</span>
-							<MoreHorizontal className="h-4 w-4" />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
-						<DropdownMenuGroup>
-							<DropdownMenuItem asChild>
-								<Link
-									href={`/dashboard/signalements/categories/${row.original.id}/modifier`}
-									className="w-full cursor-pointer"
-								>
-									Modifier
-								</Link>
-							</DropdownMenuItem>
-							<DropdownMenuItem
-								disabled={isPending}
-								onClick={handleSupprimer}
-								className="text-red-600 focus:text-red-600 cursor-pointer"
-							>
-								<Loader2
-									className={`mr-2 h-4 w-4 ${isPending ? 'animate-spin' : 'hidden'}`}
-								/>
-								<span>Supprimer</span>
-							</DropdownMenuItem>
-						</DropdownMenuGroup>
-					</DropdownMenuContent>
-				</DropdownMenu>
-			);
-		}
+		cell: ({ row }) => <CategorieSignalementRowActions categorie={row.original} />
 	}
 ];
 
