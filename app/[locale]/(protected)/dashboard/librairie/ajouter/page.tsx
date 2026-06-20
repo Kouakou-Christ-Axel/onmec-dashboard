@@ -116,7 +116,7 @@ function AjouterDocumentPage() {
 											/>
 										</FormControl>
 										<FormDescription>
-											Image de couverture du document (JPG, PNG, WebP)
+											Image de couverture du document (JPG, PNG, WebP) — 5MB maximum
 										</FormDescription>
 										<FormMessage/>
 									</FormItem>
@@ -155,7 +155,7 @@ function AjouterDocumentPage() {
 										<FormControl>
 											<Input
 												type="file"
-												accept=".pdf,.epub"
+												accept=".pdf,.epub,.mobi,.docx,.txt"
 												onChange={(e) => {
 													const file = e.target.files?.[0];
 													field.onChange(file);
@@ -164,7 +164,7 @@ function AjouterDocumentPage() {
 											/>
 										</FormControl>
 										<FormDescription>
-											Le fichier du document à uploader (PDF ou EPUB)
+											Le fichier du document à uploader (PDF, EPUB, MOBI, DOCX ou TXT) — 20MB maximum
 										</FormDescription>
 										<FormMessage/>
 									</FormItem>
