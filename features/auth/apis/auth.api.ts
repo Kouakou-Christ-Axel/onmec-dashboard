@@ -19,7 +19,7 @@ export const authAPI: IAuthAPI = {
 
   refreshToken(token: string): Promise<IRefreshTokenResponse> {
     return api.request<IRefreshTokenResponse>({
-      endpoint: `/auth/refresh`,
+      endpoint: `/auth/refresh-token`,
       method: "GET",
       service: "public",
       config: {
