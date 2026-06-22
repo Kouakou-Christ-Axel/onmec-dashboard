@@ -7,6 +7,7 @@ import {
 	IconHelp,
 	IconSettings,
 	IconBrain,
+	IconMessage,
 } from '@tabler/icons-react';
 
 export const data = {
@@ -35,6 +36,11 @@ export const data = {
 			title: 'Quiz',
 			url: '/dashboard/quizz',
 			icon: IconBrain,
+		},
+		{
+			title: 'Commentaires',
+			url: '/dashboard/commentaires',
+			icon: IconMessage,
 		},
 		{
 			title: 'Utilisateurs',
