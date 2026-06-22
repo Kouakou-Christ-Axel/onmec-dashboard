@@ -3,8 +3,8 @@ export type SiteConfig = typeof siteConfig;
 export const locales = ["ar", "en", "fr"];
 
 export const siteConfig = {
-  name: "Next-STARTER",
-  description: "Make beautiful websites regardless of your design experience.",
+  name: "Citoyen+",
+  description: "Plateforme d'administration de Citoyen+ — application citoyenne de la Côte d'Ivoire.",
   navItems: [
     {
       key: "home",

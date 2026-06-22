@@ -65,7 +65,7 @@ const LoginForm = () => {
 						id="email"
 						type="email"
 						label={t("email_label")}
-						placeholder="exemple@onmec.ci"
+						placeholder="exemple@email.com"
 						disabled={isPending}
 						isInvalid={!!errors.email}
 						errorMessage={errors.email?.message}
