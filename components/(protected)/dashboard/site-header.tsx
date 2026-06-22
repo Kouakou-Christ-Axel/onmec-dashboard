@@ -21,7 +21,7 @@ function getPageTitle(pathname: string): string {
 			return title;
 		}
 	}
-	return 'OnMec';
+	return 'Citoyen+';
 }
 
 export function SiteHeader() {

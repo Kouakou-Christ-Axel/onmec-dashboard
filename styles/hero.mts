@@ -1,6 +1,6 @@
 import { heroui } from "@heroui/react";
 
-// Palette principale : orange (ONMEC)
+// Palette principale : orange (Citoyen+)
 const primary = {
     50: "#fff7ed",
     100: "#ffedd5",
