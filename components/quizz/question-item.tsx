@@ -5,7 +5,7 @@ import { QuizzCreateDTO } from "@/features/quizz/schema/quizz.schema";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Checkbox } from "@heroui/react";
-import { Trash, X } from "lucide-react";
+import { Plus, Trash, X } from "lucide-react";
 
 
 type Props = {
@@ -14,6 +14,7 @@ type Props = {
     register: UseFormRegister<QuizzCreateDTO>;
     errors: FieldErrors<QuizzCreateDTO>;
     removeQuestion: (index: number) => void;
+    canRemove?: boolean;
 };
 
 export default function QuestionItem({
@@ -22,6 +23,7 @@ export default function QuestionItem({
     register,
     errors,
     removeQuestion,
+    canRemove = true,
 }: Props) {
 
     const questionChoicesErrors = errors.questions?.[qIndex]?.choices as
@@ -47,14 +49,40 @@ export default function QuestionItem({
         name: `questions.${qIndex}.choices`,
     });
 
+    // Le schéma impose au moins 2 choix : on empêche de descendre en dessous.
+    const canRemoveChoice = choiceFields.length > 2;
+
     return (
-        <div className="border p-4 space-y-4 rounded-xl">
+        <div className="rounded-xl border border-default-200 bg-default-50/40 p-4 space-y-4">
+
+            {/* En-tête de la question */}
+            <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                    <span className="flex size-7 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white">
+                        {qIndex + 1}
+                    </span>
+                    <span className="text-sm font-medium text-default-600">Question</span>
+                </div>
+
+                <Button
+                    type="button"
+                    color="danger"
+                    variant="light"
+                    size="sm"
+                    isDisabled={!canRemove}
+                    startContent={<Trash className="size-4" />}
+                    onPress={() => removeQuestion(qIndex)}
+                >
+                    Supprimer
+                </Button>
+            </div>
 
             {/* Texte question */}
-            <div>
+            <div className="space-y-1">
                 <Input
                     {...register(`questions.${qIndex}.text`)}
                     placeholder="Texte de la question"
+                    variant="bordered"
                 />
 
                 {errors.questions?.[qIndex]?.text && (
@@ -66,6 +94,10 @@ export default function QuestionItem({
 
             {/* Choices */}
             <div className="space-y-2">
+                <p className="text-xs font-medium text-default-500">
+                    Réponses — cochez la (ou les) bonne(s) réponse(s)
+                </p>
+
                 {choiceFields.map((choice, cIndex) => {
                     const choiceTextError = (
                         errors.questions?.[qIndex]?.choices as
@@ -76,21 +108,24 @@ export default function QuestionItem({
                     return (
                     <div key={choice.id} className="flex gap-2 items-start">
 
-                        <Controller
-                            control={control}
-                            name={`questions.${qIndex}.choices.${cIndex}.isCorrect`}
-                            render={({ field }) => (
-                                <Checkbox
-                                    isSelected={Boolean(field.value)}
-                                    onValueChange={field.onChange}
-                                />
-                            )}
-                        />
+                        <div className="pt-2" title="Bonne réponse ?">
+                            <Controller
+                                control={control}
+                                name={`questions.${qIndex}.choices.${cIndex}.isCorrect`}
+                                render={({ field }) => (
+                                    <Checkbox
+                                        isSelected={Boolean(field.value)}
+                                        onValueChange={field.onChange}
+                                    />
+                                )}
+                            />
+                        </div>
 
                         <div className="flex-1 space-y-1">
                             <Input
                                 {...register(`questions.${qIndex}.choices.${cIndex}.text`)}
                                 placeholder={`Choix ${cIndex + 1}`}
+                                variant="bordered"
                             />
 
                             {choiceTextError && (
@@ -103,8 +138,11 @@ export default function QuestionItem({
                         <Button
                             type="button"
                             color="danger"
+                            variant="light"
                             size="sm"
-                            onClick={() => removeChoice(cIndex)}
+                            isIconOnly
+                            isDisabled={!canRemoveChoice}
+                            onPress={() => removeChoice(cIndex)}
                         >
                             <X className="size-4" />
                         </Button>
@@ -120,23 +158,16 @@ export default function QuestionItem({
             </div>
 
             {/* Actions */}
-            <div className="flex gap-3 pt-2">
+            <div className="flex gap-3 pt-1">
                 <Button
                     type="button"
                     color="primary"
+                    variant="flat"
                     size="sm"
+                    startContent={<Plus className="size-4" />}
                     onPress={() => appendChoice({ text: "", isCorrect: false })}
                 >
                     Ajouter un choix
-                </Button>
-
-                <Button
-                    type="button"
-                    color="danger"
-                    size="sm"
-                    onPress={() => removeQuestion(qIndex)}
-                >
-                    <Trash className="size-4" />
                 </Button>
             </div>
 
